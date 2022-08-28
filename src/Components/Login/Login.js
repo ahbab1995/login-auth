@@ -25,7 +25,7 @@ const Login = () => {
           Submit
         </Button>
       </Form>
-      <Link to="/signup">Creact Account</Link>
+      <Link to="/signup">Create New Account</Link>
       <Button className="mt-3 d-flex "> Continue with Google</Button>
     </div>
   );
