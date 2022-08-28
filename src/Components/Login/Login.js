@@ -26,6 +26,7 @@ const Login = () => {
         </Button>
       </Form>
       <Link to="/signup">Creact Account</Link>
+      <Button className="mt-3 d-flex "> Continue with Google</Button>
     </div>
   );
 };
