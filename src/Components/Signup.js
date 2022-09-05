@@ -13,6 +13,9 @@ const Signup = () => {
   const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
 
+  const [email, setEmail] = useState({ value: "", error: "" });
+  const [password, setPassword] = useState({ value: "", error: "" });
+
   const handleGoogleAuth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -24,11 +27,6 @@ const Signup = () => {
         console.log(errorMessage);
       });
   };
-  const [email, setEmail] = useState({ value: "", error: "" });
-  const [password, setPassword] = useState("");
-  
-  console.log(email);
-  console.log(password);
   
   const handelEmail = (e) => {
     const emailInput = e.target.value;
@@ -73,7 +71,8 @@ const Signup = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
+          toast.success("Account created", { id: "created" });
+          navigate("/");
         })
         .catch((error) => {
           const errorMessage = error.message;
