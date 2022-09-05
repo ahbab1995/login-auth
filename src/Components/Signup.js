@@ -27,6 +27,8 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [conPassword, setConPassword] = useState("");
   console.log(email);
+  console.log(password);
+  console.log(conPassword);
   const handelEmail = (e) => {
     const emailInput = e.target.value;
     if (/\S+@\S+\.\S+/.test(emailInput)) {
@@ -36,21 +38,40 @@ const Signup = () => {
     }
   };
 
+  const handelPassword = (e) => {
+    const passwordInput = e.target.value;
+    if (passwordInput.length < 7) {
+      setPassword({ value: "", error: "Password too short" });
+    }
+  };
+
+  const handelConPassword = (e) => {
+    const passwordInput = e.target.value;
+    setConPassword(passwordInput);
+  };
+
   const handleSignupForm = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-      });
+    if(email === ''){
+      setEmail({ value: "", error: "Email is required" })
+    }
+    if(password === ''){
+      setPassword({ value: "", error: "Password is required" })
+    }
+    if (email.value && password.value) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log(errorMessage);
+        });
+    }
   };
 
   return (
@@ -67,7 +88,9 @@ const Signup = () => {
               onBlur={handelEmail}
             />
             <Form.Text className="text-muted">
-              {email?.error && <p>{email.error}</p>}
+              {email?.error && (
+                <p className="text-danger py-2">{email.error}</p>
+              )}
             </Form.Text>
           </Form.Group>
 
@@ -77,12 +100,20 @@ const Signup = () => {
               type="password"
               name="password"
               placeholder="Password"
+              onBlur={handelPassword}
             />
           </Form.Group>
+          {password?.error && (
+            <p className="text-danger py-2">{password.error}</p>
+          )}
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Confirm Password</Form.Label>
-            <Form.Control type="password" placeholder="Confirm Password" />
+            <Form.Control
+              type="password"
+              onBlur={handelConPassword}
+              placeholder="Confirm Password"
+            />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
