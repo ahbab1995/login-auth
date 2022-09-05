@@ -5,6 +5,7 @@ import {
 } from "firebase/auth";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase/Firebase.init";
 
@@ -25,10 +26,10 @@ const Signup = () => {
   };
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState("");
-  const [conPassword, setConPassword] = useState("");
+  
   console.log(email);
   console.log(password);
-  console.log(conPassword);
+  
   const handelEmail = (e) => {
     const emailInput = e.target.value;
     if (/\S+@\S+\.\S+/.test(emailInput)) {
@@ -45,22 +46,29 @@ const Signup = () => {
     }
   };
 
-  const handelConPassword = (e) => {
-    const passwordInput = e.target.value;
-    setConPassword(passwordInput);
-  };
+  // const handelConPassword = (conpasswordInput) => {
+  //   if (conpasswordInput !== password.value) {
+  //     setConPassword({ value: conpasswordInput, error: "" });
+  //   } else {
+  //     setConPassword({ value: "", error: "Password Mismatched" });
+  //   }
+  // };
 
   const handleSignupForm = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
-    if(email === ''){
-      setEmail({ value: "", error: "Email is required" })
+    
+    if (email === "") {
+      setEmail({ value: "", error: "Email is required" });
     }
-    if(password === ''){
-      setPassword({ value: "", error: "Password is required" })
+    if (password === "") {
+      setPassword({ value: "", error: "Password is required" });
     }
-    if (email.value && password.value) {
+    // if (conpassword === "") {
+    //   setConPassword({ value: "", error: "Confirm Password is required" });
+    // }
+    if (email && password) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
@@ -69,7 +77,11 @@ const Signup = () => {
         })
         .catch((error) => {
           const errorMessage = error.message;
-          console.log(errorMessage);
+          if(errorMessage.includes('email-already-in-use')){
+            toast.error("Email already in use", { id: "error" });
+          }else{
+            toast.error(errorMessage, { id: "error" });
+          }
         });
     }
   };
@@ -107,15 +119,18 @@ const Signup = () => {
             <p className="text-danger py-2">{password.error}</p>
           )}
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          {/* <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
+              name="conpassword"
               type="password"
               onBlur={handelConPassword}
               placeholder="Confirm Password"
             />
           </Form.Group>
-
+          {conPassword?.error && (
+            <p className="text-danger py-2">{conPassword.error}</p>
+          )} */}
           <Form.Group className="mb-3" controlId="formBasicCheckbox">
             <Form.Check type="checkbox" label="Check me out" />
           </Form.Group>
