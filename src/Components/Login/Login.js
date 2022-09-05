@@ -21,6 +21,7 @@ const Login = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         const user = result.user;
+        toast.success("Log In", { id: "created" });
         navigate("/");
       })
       .catch((error) => {
@@ -62,7 +63,8 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user);
+        toast.success("Log In", { id: "created" });
+        navigate("/");
       })
       .catch((error) => {
         const errorMessage = error.message;
